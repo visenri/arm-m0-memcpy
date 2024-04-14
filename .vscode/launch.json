@@ -1,0 +1,68 @@
+{
+    "version": "0.2.0",
+    // C:/PROGS/ELECTRON/Raspberry/pico/pico-sdk
+    "configurations": [
+        {
+            "name": "PicoDebug",
+            "cwd": "${workspaceRoot}",
+            "executable": "${command:cmake.launchTargetPath}",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            // This may need to be arm-none-eabi-gdb depending on your system
+            "gdbPath" : "arm-none-eabi-gdb",
+            "device": "RP2040",
+            "configFiles": [
+                "interface/picoprobe.cfg",
+                "target/rp2040.cfg"
+            ],
+            "svdFile": "${env:PICO_SDK_PATH}/src/rp2040/hardware_regs/rp2040.svd",
+            "openOCDLaunchCommands": [
+                // Fixes problems with breakpoints, but only works after the 2nd run, if done in the postLaunchCommands it works every time.
+                //"init ; reset halt ; rp2040.core1 arp_reset assert 0 ; rp2040.core0 arp_reset assert 0; reset halt"
+            ],
+            //"runToEntryPoint": "${input:entryPoint}",
+            "runToEntryPoint": "${input:RUN_TO_ENTRY_ID}",
+            //"runToMain": true,
+            // Work around for stopping at main on restart
+            "postLaunchCommands": [
+                //"break main"
+                // This is the definitive fix for the breakpoints problems.
+                //"monitor rp2040.core1 arp_reset assert 0 ; rp2040.core0 arp_reset assert 0 ; reset halt",
+                //"monitor reset halt ; rp2040.core1 arp_reset assert 1 ; rp2040.core0 arp_reset assert 0 ; exit"
+                "${input:CONTINUE_ID}",
+                
+                
+            ],
+            "postRestartCommands": [
+               // "break main",
+                "${input:CONTINUE_ID}"
+            ],
+            "searchDir": ["${env:PICO_OPENOCD_PATH}/tcl"],
+            //"showDevDebugOutput": "raw"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "RUN_TO_ENTRY_ID",
+            "type": "command",
+            "command": "extension.commandvariable.file.content",
+            "args": {
+              "fileName": "${workspaceFolder}/.vscode/options.txt",
+              "key": "RUN_TO_ENTRY_ID",
+              "default": ""
+            }
+        },
+        {
+            "id": "CONTINUE_ID",
+            "type": "command",
+            "command": "extension.commandvariable.file.content",
+            "args": {
+              "fileName": "${workspaceFolder}/.vscode/options.txt",
+              "key": "CONTINUE_ID",
+              "default": ""
+            }
+        }
+      ]
+
+}

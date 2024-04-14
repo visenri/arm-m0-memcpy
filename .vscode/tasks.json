@@ -1,0 +1,156 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build task",
+            "type": "shell",
+            "command": "${command:cmake.build}",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": {
+                "owner": "ClearProblemsPaneWorkaround",
+                "base": "$gcc",
+                "fileLocation": [
+                    "absolute"
+                ]
+            }
+        },
+        {
+            "label": "ClearProblemsPaneWorkaround",
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "type": "shell",
+            "command": [
+                "dir"
+            ],
+            "problemMatcher": {
+                "fileLocation": "relative",
+                "pattern": {
+                    "regexp": "(ClearProblemsPaneWorkaround)",
+                    "file": 1,
+                    "line": 1,
+                    "message": 2,
+                    "severity": 1
+                },
+                "owner": "ClearProblemsPaneWorkaround"
+            },
+            "options": {
+                "shell": {
+                    "executable": "C:\\Windows\\system32\\cmd.exe",
+                    "args": [
+                        "/d",
+                        "/c"
+                    ]
+                }
+            }
+        },
+        {
+            "label": "DebugOptionsEnabled",
+            "command": "${workspaceFolder}/.vscode/debug_opt",
+            "args": ["1"],
+            "type": "shell",
+            "options": {"cwd": "${workspaceFolder}/.vscode/"},
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+        },
+        {
+            "label": "DebugOptionsDisabled",
+            "command": "${workspaceFolder}/.vscode/debug_opt",
+            "args": ["0"],
+            "type": "shell",
+            "options": {"cwd": "${workspaceFolder}/.vscode/"},
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+        },
+        {
+            "label": "DebuggingStop",
+            "command": "${command:workbench.action.debug.stop}"
+        },
+        {
+            "label": "DebuggingRun",
+            "command": "${command:workbench.action.debug.run}"
+        },
+        {
+            "label": "DebuggingStart",
+            "command": "${command:workbench.action.debug.start}"
+        },
+        {
+            "label": "PauseProgram",
+            "command": "${command:workbench.action.debug.pause}"
+        },
+        {
+            "label": "ContinueProgram",
+            "command": "${command:workbench.action.debug.restart}"
+        },
+        {
+            "label": "StopStartDebugging",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "DebuggingStop",
+                "DebuggingRun",
+                "PauseProgram",
+                "PauseProgram",
+                "PauseProgram",
+                "ContinueProgram",
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "StopStartWithoutDebugging",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "DebuggingStop",
+                "DebugOptionsDisabled",
+                "DebuggingRun"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "StopStartWithDebugging",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "DebuggingStop",
+                "DebugOptionsEnabled",
+                "DebuggingStart"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "StartWithDebugging",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "DebugOptionsEnabled",
+                "DebuggingStart"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}
