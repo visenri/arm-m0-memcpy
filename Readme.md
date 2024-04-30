@@ -15,3 +15,4 @@ See more details in my blog:
 https://visenri.users.sourceforge.net/blog/2024/mempy_replacement_for_armv6-Part1
 
 The .vscode folder contains my settings, replace it with your own in case of problems.
+
